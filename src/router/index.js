@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
-
+import Welcome from '../components/Welcome.vue'
+import Users from '../components/user/Users.vue'
+import Roles from '../components/user/Roles.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -11,7 +13,17 @@ const routes = [
   // 当登录login路由的时候,调用组件Login
   { path: '/login', component: Login },
   // 当用户输入完账号密码后进入主页
-  { path: '/home', component: Home }
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      // 进入/home路由时自动跳转到welcome路由，其实就是默认home页面显示主要内容
+      { path: '/welcome', component: Welcome },
+      { path: '/users', component: Users },
+      { path: '/roles', component: Roles }
+    ]
+  }
 ]
 
 const router = new VueRouter({

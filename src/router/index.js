@@ -8,6 +8,7 @@ import Roles from '../components/power/Roles.vue'
 import Rights from '../components/power/Rights.vue'
 import EditRole from '../components/power/EditRole.vue'
 import Categories from '../components/goods/Categories.vue'
+import Params from '../components/goods/Params.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,7 +28,8 @@ const routes = [
       { path: '/roles', component: Roles },
       { path: '/rights', component: Rights },
       { path: '/editRole/:id', component: EditRole },
-      { path: '/categories', component: Categories }
+      { path: '/categories', component: Categories },
+      { path: '/params', component: Params }
     ]
   }
 ]

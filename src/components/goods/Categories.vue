@@ -309,11 +309,4 @@ export default {
 .treeTable {
   margin-top: 15px;
 }
-.el-cascader-panel {
-  overflow: auto;
-  height: 300px;
-  .el-scrollbar {
-    height: 100%;
-  }
-}
 </style>

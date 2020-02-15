@@ -143,7 +143,12 @@
     </el-dialog>
 
     <!-- 分配角色对话框 -->
-    <el-dialog title="提示" :visible.sync="editRolesDialogVisible" width="40%" @close="setRoleDialogClosed">
+    <el-dialog
+      title="提示"
+      :visible.sync="editRolesDialogVisible"
+      width="40%"
+      @close="setRoleDialogClosed"
+    >
       <div>
         <p>当前的用户：{{userInfo.username}}</p>
         <p>当前角色：{{userInfo.role_name}}</p>
@@ -348,7 +353,8 @@ export default {
       if (res.meta.status !== 200) return this.$message.error('删除操作失败')
       this.$message.success('删除成功!')
       // 因为删除后有可能是最后一页的数据,此时的pagenum无法更新,所以需要手动设置出pagenum的值然后再更新页面
-      this.queryInfo.pagenum = Math.ceil((this.total - 1) / this.queryInfo.pagesize)
+      const totalPage = Math.ceil((this.total - 1) / this.queryInfo.pagesize)
+      this.queryInfo.pagenum = this.queryInfo.pagenum > totalPage ? totalPage : this.queryInfo.pagenum
       // 删除成功后更新数据
       this.getUsers()
     },
@@ -374,7 +380,7 @@ export default {
       this.getUsers()
     },
     // 监听角色分配对话框关闭的事件 清空数据
-    setRoleDialogClosed() {
+    setRoleDialogClosed () {
       this.userInfo = ''
       this.selectRoleId = ''
     }

@@ -236,7 +236,8 @@ export default {
         const { data: res } = await this.$http.delete('/categories/' + row.cat_id)
         if (res.meta.status !== 200) return this.$message.error('删除分类操作失败')
         // 删除成功之后原本的页面值并没有发生变化,数据是少了默认还在最后一页,所以需要修改当前页数据,如果删除的是最后一个数据,那么就要重新再渲染页面
-        this.queryInfo.pagenum = Math.ceil((this.total - 1) / this.queryInfo.pagesize)
+        const totalPage = Math.ceil((this.total - 1) / this.queryInfo.pagesize)
+        this.queryInfo.pagenum = this.queryInfo.pagenum > totalPage ? totalPage : this.queryInfo.pagenum
         // 重新渲染页面 更新数据
         this.getCategories()
       }

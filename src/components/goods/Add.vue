@@ -63,15 +63,19 @@
             <!-- 渲染表单的item项 -->
             <el-form-item :label="item.attr_name" v-for="(item,i) in manyTableData" :key="i">
               <!-- 复选框组 -->
-              <el-checkbox-group v-model="item.attr_vals" size="mini">
+              <el-checkbox-group v-if="addOrEdit==='添加商品'" v-model="item.attr_vals" size="mini">
                 <el-checkbox border :label="item2" v-for="(item2,i2) in item.attr_vals" :key="i2"></el-checkbox>
+              </el-checkbox-group>
+              <el-checkbox-group v-else v-model="item.attr_value" size="mini">
+                <el-checkbox border :label="item2" v-for="(item2,i2) in item.attr_value" :key="i2"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品属性" name="2">
             <!-- 商品属性的表单 -->
             <el-form-item :label="item.attr_name" v-for="(item,i) in onlyTableData" :key="i">
-              <el-input v-model="item.attr_vals"></el-input>
+              <el-input v-model="item.attr_vals" v-if="addOrEdit==='添加商品'"></el-input>
+              <el-input v-model="item.attr_value" v-else></el-input>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品图片" name="3">
@@ -84,6 +88,7 @@
               list-type="picture"
               :headers="headerObj"
               :on-success="handleSuccess"
+              :file-list="fileList"
             >
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -177,8 +182,8 @@ export default {
       previewPath: '',
       // 图片预览对话框默认隐藏
       previewVisible: false,
-      // 添加还是编辑的标题
-      addOrEdit: ''
+      // 上传文件的列表
+      fileList: []
     }
   },
   //   生命周期函数钩子 模板还没有被渲染成html
@@ -187,16 +192,24 @@ export default {
     this.getGoods()
   },
   methods: {
+    // 根据id查询商品信息
     async getGoods () {
       const { data: res } = await this.$http.get(`/goods/${this.$route.params.id}`)
       if (res.meta.status !== 200) return
-      this.addOrEdit = '编辑商品'
       const data = res.data
       //   渲染默认级联选择器的值
       data.goods_cat = data.goods_cat.split(',').map(Number)
+      // 遍历获取动态参数和静态属性的值
+      data.attrs.forEach(item => {
+        if (item.attr_sel === 'only') this.onlyTableData.push(item)
+        if (item.attr_sel === 'many') this.manyTableData.push(item)
+      })
       //   进行赋值操作
       this.addForm = data
-      //   console.log(this.addForm)
+      this.addForm.pics.forEach(item => {
+        this.fileList.push({ name: item.pics_id, url: item.pics_mid_url })
+      })
+      console.log(this.addForm)
     },
     //   级联选择框发生变化时触发
     handleChange (value) {
@@ -209,7 +222,6 @@ export default {
     async getCategories () {
       const { data: res } = await this.$http.get('/categories')
       if (res.meta.status !== 200) return this.$message.error('获取分类列表失败')
-      this.addOrEdit = '添加商品'
       this.categories = res.data
     },
     // 切换Tab栏之前监听的事件
@@ -222,21 +234,21 @@ export default {
     // 当标签页发生切换时触发
     async tabClicked () {
       // 证明访问的是动态参数面板
-      if (this.activeIndex === '1') {
+      if (this.activeIndex === '1' && this.addOrEdit === '添加商品') {
         this.titleText = 'many'
         this.getAttrData()
       }
       // 证明访问的是静态属性面板
-      if (this.activeIndex === '2') {
+      if (this.activeIndex === '2' && this.addOrEdit === '添加商品') {
         this.titleText = 'only'
-        await this.getAttrData()
+        this.getAttrData()
         // console.log(this.onlyTableData)
       }
       console.log(this.addForm)
       console.log(this.manyTableData)
     },
     // 动态获取参数 和 属性的值
-    async getAttrData (titleText) {
+    async getAttrData () {
       const { data: res } = await this.$http.get(`/categories/${this.cateId}/attributes/?sel=${this.titleText}`)
       if (res.meta.status !== 200) return this.$message.error('获取动态参数列表失败')
       // 将获取到的动态参数字符串转为数组  静态属性还是保持字符串形式
@@ -249,7 +261,8 @@ export default {
     },
     // 处理图片预览效果
     handlePreview (file) {
-      this.previewPath = file.response.data.url
+      console.log(file)
+      this.previewPath = file.url
       this.previewVisible = true
     },
     // 处理图片移除效果
@@ -257,7 +270,7 @@ export default {
       // 1.获取将要删除的图片临时路径
       // 2.从pics数组中,找到这个图片对应的索引
       // 3.调用数组 splice方法把图片信息对象,从pics数组中移除
-      const tmpPath = file.response.data.tmp_path
+      const tmpPath = file.url
       const index = this.addForm.pics.findIndex(item => item.pic === tmpPath)
       // 此方法是响应式的
       this.addForm.pics.splice(index, 1)
@@ -316,7 +329,7 @@ export default {
       await this.onlyTableData.forEach(item => {
         //   console.log(item.attr_id)
         //   console.log(item.attr_vals)
-        this.addForm.attrs.push({ attr_id: item.attr_id, attr_value: item.attr_vals })
+        this.addForm.attrs.push({ attr_id: item.attr_id, attr_value: item.attr_value })
       })
       //   获取级联选择值,上传给后台 ,后台要转换成字符串,所以需要复制一下传送体
       const form = _.cloneDeep(this.addForm)
@@ -347,6 +360,10 @@ export default {
       if (this.addForm.goods_cat.length === 3) return this.addForm.goods_cat[2]
       // 否则表明没有选中三级分类,选中一个空值
       return null
+    },
+    // 添加还是编辑的标题
+    addOrEdit () {
+      return this.$route.params.id ? '编辑商品' : '添加商品'
     }
   }
 }

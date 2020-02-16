@@ -29,9 +29,14 @@
           <!-- 利用作用域插槽对日期格式进行设置 渲染过滤器-->
           <template v-slot="{row}">{{row.add_time | dateFormat}}</template>
         </el-table-column>
-        <el-table-column label="操作" width="150px">
+        <el-table-column label="操作" width="120px">
           <template v-slot="{row}">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="goEditPage(row)"></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="goEditPage(row)"
+            ></el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(row)"></el-button>
           </template>
         </el-table-column>

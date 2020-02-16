@@ -81,7 +81,7 @@ export default {
   // 在页面刚加载的时候就立即获取左侧菜单 这里用到生命周期created
   created () {
     this.getMenuList()
-    this.path = window.sessionStorage.getItem('activePath')
+    // this.path = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout () {

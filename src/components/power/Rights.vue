@@ -14,7 +14,7 @@
         <el-table-column prop="authName" label="权限名称"></el-table-column>
         <el-table-column prop="path" label="路径"></el-table-column>
         <el-table-column prop="level" label="权限等级">
-          <template v-slot={row}>
+          <template v-slot="{row}">
             <el-tag v-if="row.level==='0'">一级权限</el-tag>
             <el-tag v-else-if="row.level==='1'" type="success">二级权限</el-tag>
             <el-tag v-else type="warning">三级权限</el-tag>
@@ -40,7 +40,7 @@ export default {
     // 获取权限列表
     async getRights () {
       const { data: res } = await this.$http.get('/rights/list')
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) return this.$message.error('获取权限列表失败')
       this.rightsList = res.data
     }

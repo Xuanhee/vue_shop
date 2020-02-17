@@ -280,7 +280,7 @@ export default {
     },
     // 点击修改状态
     async changeState (row) {
-      const { data: res } = await this.$http.put('/users/' + row.id + '/state/' + row.msg_state)
+      const { data: res } = await this.$http.put('/users/' + row.id + '/state/' + row.mg_state)
       // console.log(res)
       if (res.meta.status !== 200) {
         // 如果设置状态失败请求没发出去,但是页面的值变了,这里要修改让页面的值变回点之前的值
@@ -314,7 +314,7 @@ export default {
     // 展示编辑用户的对话框
     async showEditDialog (id) {
       const { data: res } = await this.$http.get('/users/' + id)
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) return this.$message.error('修改用户操作无效')
       this.editDialogVisible = true
       this.editForm = res.data
@@ -322,7 +322,7 @@ export default {
     // 点击修改用户对话框中的确定 进行表单预验证和发送请求
     editUser (id) {
       this.$refs.editFormRef.validate(async (valid) => {
-        console.log(valid)
+        // console.log(valid)
         // 点击确认按钮进行预效验,防止用户误操作无数据就发送请求
         if (!valid) return this.$message.error('修改用户验证失败')
         // 校验成功之后发送修改用户数据请求  根据接口要求发送的参数只能是邮箱和手机号
@@ -365,7 +365,7 @@ export default {
       if (res.meta.status !== 200) return this.$message.error('查询失败')
       this.userInfo = row
       this.rolesList = res.data
-      console.log(this.rolesList)
+      // console.log(this.rolesList)
     },
     // 点击分配角色对话框的确认按钮,修改用户的角色信息
     async savaRoleInfo () {

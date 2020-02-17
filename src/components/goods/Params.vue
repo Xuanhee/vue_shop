@@ -287,7 +287,7 @@ export default {
           attr_name: this.addForm.attr_name,
           attr_sel: this.activeName
         })
-        console.log(res)
+        // console.log(res)
         if (res.meta.status !== 201) return this.$message.error('创建参数失败')
         this.$message.success('添加参数成功')
         //   关闭对话框

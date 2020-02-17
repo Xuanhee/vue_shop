@@ -209,7 +209,7 @@ export default {
       this.addForm.pics.forEach(item => {
         this.fileList.push({ name: item.pics_id, url: item.pics_mid_url })
       })
-      console.log(this.addForm)
+      // console.log(this.addForm)
     },
     //   级联选择框发生变化时触发
     handleChange (value) {
@@ -244,8 +244,6 @@ export default {
         this.getAttrData()
         // console.log(this.onlyTableData)
       }
-      console.log(this.addForm)
-      console.log(this.manyTableData)
     },
     // 动态获取参数 和 属性的值
     async getAttrData () {
@@ -261,7 +259,7 @@ export default {
     },
     // 处理图片预览效果
     handlePreview (file) {
-      console.log(file)
+      // console.log(file)
       this.previewPath = file.url
       this.previewVisible = true
     },
@@ -301,7 +299,7 @@ export default {
         // lodash cloneDeep(obj) 深拷贝,因为表单中会存在双向绑定,所以深拷贝一份来处理不影响表单中的值
         const form = _.cloneDeep(this.addForm)
         form.goods_cat = form.goods_cat.join(',')
-        console.log(form)
+        // console.log(form)
         // 发起请求添加商品, 商品名称必须是唯一的
         const { data: res } = await this.$http.post('/goods', form)
         if (res.meta.status !== 201) this.$message.error('添加商品失败')
@@ -345,7 +343,7 @@ export default {
         pics: this.addForm.pics,
         attrs: this.addForm.attrs
       })
-      console.log(this.addForm)
+      // console.log(this.addForm)
       if (res.meta.status !== 200) return this.$message.error('修改商品信息失败')
       this.$message.success('修改商品操作成功')
       //   跳转到商品列表页面

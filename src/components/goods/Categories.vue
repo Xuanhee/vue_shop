@@ -206,7 +206,7 @@ export default {
     // 监听 点击编辑分类按钮
     async showEditCategories (row) {
       const { data: res } = await this.$http.get('/categories/' + row.cat_id)
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) return this.$message.error('编辑分类失败')
       this.editCateDialogVisible = true
       this.editCateForm = res.data
@@ -217,7 +217,7 @@ export default {
         if (!valid) return this.$message.error('分类名称不符合要求')
         // 预验证通过之后向服务器端发送请求
         const { data: res } = await this.$http.put('/categories/' + this.editCateForm.cat_id, { cat_name: this.editCateForm.cat_name })
-        console.log(res)
+        // console.log(res)
         if (res.meta.status !== 200) return this.$message.error('修改分类失败')
         this.$message.success('修改分类操作成功')
         // 关闭修改对话框
@@ -258,7 +258,7 @@ export default {
       // 显示添加分类的对话框
       this.cateDialogVisible = true
       this.getParentCateList()
-      console.log(this.categoriesForm)
+      // console.log(this.categoriesForm)
     },
     // 获取父级分类的数据列表
     async getParentCateList () {
@@ -273,7 +273,7 @@ export default {
         if (!valid) return this.$message.error('分类添加信息有误')
         // 发送请求添加分类
         const { data: res } = await this.$http.post('/categories', this.categoriesForm)
-        console.log(res)
+        // console.log(res)
         if (res.meta.status !== 201) return this.$message.error('添加分类失败')
         this.$message.success('添加分类操作成功')
         // 隐藏添加分类对话框

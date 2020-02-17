@@ -148,7 +148,7 @@ export default {
       // 发送get请求需要发送一个对象内含有params的对象
       const { data: res } = await this.$http.get('/orders', { params: this.queryInfo })
       if (res.meta.status !== 200) return
-      console.log(res.data)
+      // console.log(res.data)
       this.orderList = res.data.goods
       // 订单总数量
       this.total = res.data.total
@@ -182,7 +182,7 @@ export default {
       if (res.meta.status !== 200) return this.$meesage.error('查询物流信息失败')
       this.progressVisible = true
       this.progressInfo = res.data
-      console.log(res.data)
+      // console.log(res.data)
     }
   }
 }

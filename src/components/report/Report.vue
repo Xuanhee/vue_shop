@@ -63,7 +63,7 @@ export default {
     var myChart = echarts.init(document.getElementById('main'))
     const { data: res } = await this.$http.get('/reports/type/1')
     if (res.meta.status !== 200) return
-    console.log(res.data)
+    // console.log(res.data)
     // 4.指定图表的配置项和数据
     // 这是lodash的merge函数,合并两个数据
     const result = _.merge(res.data, this.options)
